@@ -1,4 +1,9 @@
-const BASE = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000') + '/api'
+const configuredApiUrl = import.meta.env.VITE_API_URL?.trim()
+const defaultApiUrl = import.meta.env.DEV
+  ? 'http://127.0.0.1:5000'
+  : 'https://netcomply-api.onrender.com'
+const apiOrigin = (configuredApiUrl || defaultApiUrl).replace(/\/+$/, '')
+const BASE = apiOrigin.endsWith('/api') ? apiOrigin : `${apiOrigin}/api`
 
 async function req(path, opts) {
   const res = await fetch(BASE + path, opts)
