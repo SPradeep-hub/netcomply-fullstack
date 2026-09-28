@@ -5,12 +5,19 @@ export default function Training() {
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
   const [selections, setSelections] = useState({})
+  const [saving, setSaving] = useState(null)
 
-  function load() {
-    api.pendingTraining().then(setData).catch((e) => setError(e.message))
+  async function load() {
+    setError(null)
+    try {
+      setData(await api.pendingTraining())
+    } catch (e) {
+      setError(e.message)
+      throw e
+    }
   }
 
-  useEffect(load, [])
+  useEffect(() => { load().catch(() => {}) }, [])
 
   if (error) return <div className="panel error">Could not reach the API: {error}</div>
   if (!data) return <div className="empty">Loading…</div>
@@ -22,12 +29,30 @@ export default function Training() {
   }
 
   async function confirm(item) {
-    const choice = selections[keyFor(item)]
-    if (!choice) return
-    const [field, rawValue, label] = choice.split('|')
-    const value = rawValue === 'true' ? true : (/^\d+$/.test(rawValue) ? Number(rawValue) : rawValue)
-    await api.confirmMapping({ device_id: item.device_id, line: item.line, field, value, label })
-    load()
+    const field = selections[keyFor(item)]
+    if (!field) return
+    const category = categories.find((option) => option.field === field)
+    const value = category?.value
+    setSaving(keyFor(item))
+    setError(null)
+    try {
+      await api.confirmMapping({
+        device_id: item.device_id,
+        line: item.line,
+        field,
+        value,
+      })
+      setSelections((current) => {
+        const next = { ...current }
+        delete next[keyFor(item)]
+        return next
+      })
+      await load()
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setSaving(null)
+    }
   }
 
   return (
@@ -37,6 +62,7 @@ export default function Training() {
         NetComply flagged lines it couldn't classify against known vendor syntax.
         Confirm what each one means — the mapping is then learned and reused automatically next time.
       </div>
+      {error && <div className="error" role="alert">{error}</div>}
 
       {pending.length === 0 ? (
         <div className="panel"><div className="empty">
@@ -58,15 +84,21 @@ export default function Training() {
                 <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   <select
                     value={selections[k] || ''}
-                    onChange={(e) => setSelections({ ...selections, [k]: e.target.value })}
+                    onChange={(e) => setSelections((current) => ({ ...current, [k]: e.target.value }))}
                   >
                     <option value="">— choose category —</option>
                     {categories.map((c) => (
-                      <option key={c.label} value={`${c.field}|${c.value}|${c.label}`}>{c.label}</option>
+                      <option key={c.field} value={c.field}>{c.label}</option>
                     ))}
-                    <option value="ignore|_|ignore">Not security-relevant / ignore</option>
+                    <option value="ignore">Not security-relevant / ignore</option>
                   </select>
-                  <button className="primary" onClick={() => confirm(item)}>Confirm &amp; Learn</button>
+                  <button
+                    className="primary"
+                    disabled={!selections[k] || saving === k}
+                    onClick={() => confirm(item)}
+                  >
+                    {saving === k ? 'Saving…' : 'Confirm & Learn'}
+                  </button>
                 </div>
               </div>
             )
