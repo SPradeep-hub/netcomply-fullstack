@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: netcomply-api
+    runtime: python
+    rootDir: netcomply
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn api:app
+    healthCheckPath: /api/samples
+    plan: free
+
+  - type: web
+    name: netcomply-frontend
+    runtime: static
+    buildCommand: cd netcomply-frontend && npm ci && npm run build
+    staticPublishPath: netcomply-frontend/dist
+    plan: free
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: netcomply-api
+          envVarKey: RENDER_EXTERNAL_URL
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
