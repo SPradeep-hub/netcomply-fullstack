@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: netcomply-api
+    name: netcomply-fullstack-2
     runtime: python
     rootDir: netcomply
     buildCommand: pip install -r requirements.txt
@@ -18,7 +18,7 @@ services:
       - key: VITE_API_URL
         fromService:
           type: web
-          name: netcomply-api
+          name: netcomply-fullstack-2
           envVarKey: RENDER_EXTERNAL_URL
     routes:
       - type: rewrite

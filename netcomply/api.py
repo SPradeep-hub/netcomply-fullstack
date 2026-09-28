@@ -8,6 +8,7 @@ Run: pip install -r requirements.txt && python api.py
 Serves on http://127.0.0.1:5000, CORS-enabled for the Vite dev server (5173).
 """
 import io
+import re
 import uuid
 from pathlib import Path
 from flask import Flask, request, jsonify, send_file
@@ -22,7 +23,12 @@ from nlp_classifier import classify_line, confirm_mapping, all_learned_mappings
 from report_generator import generate_pdf
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": [
+    "https://netcomply-fullstack.vercel.app",
+    re.compile(r"https://netcomply-fullstack-.*\.vercel\.app"),
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]}})
 app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024
 
 

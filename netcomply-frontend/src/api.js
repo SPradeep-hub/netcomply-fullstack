@@ -1,7 +1,7 @@
 const configuredApiUrl = import.meta.env.VITE_API_URL?.trim()
 const defaultApiUrl = import.meta.env.DEV
   ? 'http://127.0.0.1:5000'
-  : 'https://netcomply-api.onrender.com'
+  : 'https://netcomply-fullstack-2.onrender.com'
 const apiOrigin = (configuredApiUrl || defaultApiUrl).replace(/\/+$/, '')
 const BASE = apiOrigin.endsWith('/api') ? apiOrigin : `${apiOrigin}/api`
 
