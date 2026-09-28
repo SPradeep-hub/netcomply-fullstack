@@ -73,6 +73,7 @@ def list_samples():
     return jsonify(sorted(
         path.name for path in SAMPLE_DIR.iterdir()
         if path.is_file() and not path.name.startswith(".")
+
     ))
 
 
