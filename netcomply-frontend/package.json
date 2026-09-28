@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/start-dev.js",
+    "dev:frontend": "vite",
+    "start": "node scripts/start-dev.js",
     "build": "node ./node_modules/vite/bin/vite.js build",
     "preview": "vite preview"
   },

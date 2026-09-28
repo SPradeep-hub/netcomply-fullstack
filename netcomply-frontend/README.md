@@ -4,16 +4,14 @@ Talks to the Flask JSON API in `../netcomply/api.py`.
 
 ## Setup
 ```bash
-# terminal 1 — backend
-cd netcomply
-pip install -r requirements.txt
-python api.py          # http://127.0.0.1:5000
-
-# terminal 2 — frontend
 cd netcomply-frontend
 npm install
-npm run dev             # http://127.0.0.1:5173
+npm run dev
 ```
+
+This starts both the Flask API (`http://127.0.0.1:5000`) and the Vite frontend
+(`http://127.0.0.1:5173`). Install Python dependencies first with
+`python -m pip install -r ../netcomply/requirements.txt`.
 
 ## Structure
 ```
