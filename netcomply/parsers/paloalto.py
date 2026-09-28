@@ -48,7 +48,7 @@ class PaloAltoParser(BaseParser):
             elif re.search(r"idle-timeout", line, re.I):
                 cdm.session_timeout_set = True
             elif re.search(r"deviceconfig system hostname", line, re.I):
-                pass  # already captured via _extract_hostname
+                pass
             else:
                 matched = False
             if not matched:

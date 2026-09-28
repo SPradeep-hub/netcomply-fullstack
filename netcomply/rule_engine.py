@@ -6,8 +6,6 @@ subset; extend RULES with NIST/STIG/ISO entries by adding a `framework` value
 -- the engine itself never needs to change per framework.
 """
 from models import CDM, Finding
-
-# remediation commands per vendor, keyed by rule id
 REMEDIATION = {
     "ssh_version": {
         "cisco": "ip ssh version 2",

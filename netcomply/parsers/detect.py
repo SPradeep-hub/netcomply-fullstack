@@ -23,8 +23,6 @@ def detect_and_parse(config_text: str):
         if parser.matches(config_text):
             cdm, unrecognized = parser.parse(config_text)
             return parser.vendor_name, cdm, unrecognized
-
-    # Unknown vendor entirely
     cdm = CDM(vendor="unknown", os="unknown")
     lines = [l.strip() for l in config_text.splitlines() if l.strip() and not l.strip().startswith("#")]
     return "unknown", cdm, lines

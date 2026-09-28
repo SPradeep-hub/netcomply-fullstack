@@ -43,7 +43,7 @@ class Finding:
     rule_id: str
     title: str
     framework: str
-    severity: str          # HIGH / MEDIUM / LOW
+    severity: str
     passed: bool
     why: str
     remediation: str

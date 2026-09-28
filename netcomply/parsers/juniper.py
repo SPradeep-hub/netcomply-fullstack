@@ -52,11 +52,11 @@ class JuniperParser(BaseParser):
             elif re.search(r"idle-timeout", line, re.I):
                 cdm.session_timeout_set = True
             elif re.search(r"^system\b|^services\b|^ssh\b|^host-name", line, re.I):
-                pass  # structural container / already-extracted hostname line
+                pass
             elif re.search(r"^server\s+[\d.]+$", line):
-                pass  # nested ntp { server x.x.x.x; } line, parent already handled
+                pass
             elif re.search(r"^host\s+[\d.]+\s+any", line, re.I):
-                pass  # nested syslog { host x.x.x.x any notice; } line, parent already handled
+                pass
             else:
                 matched = False
             if not matched:

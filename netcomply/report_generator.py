@@ -27,8 +27,6 @@ def generate_pdf(device: Device, out_path: str):
 
     story.append(Paragraph("NetComply — Network Security Compliance Report", title_style))
     story.append(Spacer(1, 10))
-
-    # Device Identification
     story.append(Paragraph("Device Identification", h2))
     info_table = Table([
         ["Hostname", device.cdm.hostname],
@@ -47,8 +45,6 @@ def generate_pdf(device: Device, out_path: str):
         ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
     ]))
     story.append(info_table)
-
-    # Compliance Findings
     story.append(Paragraph("Compliance Findings", h2))
     sev_color = {"HIGH": colors.HexColor("#c0392b"),
                  "MEDIUM": colors.HexColor("#b7791f"),
@@ -70,8 +66,6 @@ def generate_pdf(device: Device, out_path: str):
         style.append(("TEXTCOLOR", (3, i), (3, i), color))
     ftable.setStyle(TableStyle(style))
     story.append(ftable)
-
-    # Remediation Paths (failed rules only)
     failed = [f for f in device.findings if not f.passed]
     if failed:
         story.append(Paragraph("Remediation Paths", h2))

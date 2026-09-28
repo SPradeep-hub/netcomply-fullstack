@@ -55,7 +55,7 @@ class CiscoParser(BaseParser):
             elif re.search(r"exec-timeout", line, re.I):
                 cdm.session_timeout_set = True
             elif re.search(r"^line vty|^hostname", line, re.I):
-                pass  # structural, not a compliance field
+                pass
             else:
                 matched = False
             if not matched:

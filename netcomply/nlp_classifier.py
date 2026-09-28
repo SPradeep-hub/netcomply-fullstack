@@ -17,8 +17,6 @@ import os
 import re
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), "data", "learned_mappings.json")
-
-# field -> CDM attribute the category maps onto, and the value a "positive" match implies
 KEYWORD_RULES = [
     {"pattern": r"idle-timeout|idle timeout|session.*timeout",
      "field": "session_timeout_set", "value": True,
@@ -89,7 +87,6 @@ def classify_line(line: str):
 def confirm_mapping(line: str, field: str, value, category: str):
     """Called when an admin confirms a suggestion in the training UI."""
     learned = _load_learned()
-    # key on the most distinctive token in the line so future similar lines match
     tokens = [t for t in re.split(r"\s+", line) if len(t) > 3]
     keyword = tokens[0] if tokens else line[:12]
     learned[keyword] = {"field": field, "value": value, "category": category}

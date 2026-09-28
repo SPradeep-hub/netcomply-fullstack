@@ -24,12 +24,9 @@ from report_generator import generate_pdf
 app = Flask(__name__)
 
 DEVICES: dict[str, Device] = {}
-PENDING: list[dict] = []   # {"device_id":.., "line":.., "suggestion": {...} | None}
+PENDING: list[dict] = []   
 
 SAMPLE_DIR = os.path.join(os.path.dirname(__file__), "sample_configs")
-
-
-# ---------- shared layout ----------
 LAYOUT = """
 <!doctype html><html><head><title>NetComply</title>
 <style>
@@ -62,9 +59,6 @@ button{cursor:pointer}
 def render(content_html, **ctx):
     return render_template_string(LAYOUT, content=render_template_string(content_html, **ctx),
                                    pending_count=len(PENDING))
-
-
-# ---------- dashboard ----------
 @app.route("/")
 def dashboard():
     total = len(DEVICES)
@@ -97,9 +91,6 @@ def dashboard():
     {% else %}<p style="color:#8b96ac">No devices scanned yet. Go to Upload &amp; Scan.</p>{% endif %}
     """
     return render(tmpl, total=total, compliant=compliant, sev=sev, devices=list(DEVICES.values()))
-
-
-# ---------- upload / ingestion ----------
 @app.route("/upload")
 def upload_page():
     samples = [f for f in os.listdir(SAMPLE_DIR)] if os.path.exists(SAMPLE_DIR) else []
@@ -151,9 +142,6 @@ def analyze():
             PENDING.append({"device_id": device_id, "line": line, "suggestion": suggestion})
 
     return redirect(url_for("report", device_id=device_id))
-
-
-# ---------- AI training loop ----------
 @app.route("/training")
 def training():
     tmpl = """
@@ -216,9 +204,6 @@ def confirm():
     global PENDING
     PENDING = [p for p in PENDING if not (p["line"] == line and p["device_id"] == device_id)]
     return redirect(url_for("training"))
-
-
-# ---------- reports ----------
 @app.route("/report/<device_id>")
 def report(device_id):
     device = DEVICES.get(device_id)

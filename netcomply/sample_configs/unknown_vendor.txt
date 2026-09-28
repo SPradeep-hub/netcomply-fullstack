@@ -1,4 +1,3 @@
-# ArcticSwitch OS v3 -- device not in vendor library
 device-name FrostGate-01
 security administrator idle-timeout 600
 crypto access secure-shell version2 enable
