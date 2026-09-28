@@ -38,10 +38,10 @@ class CiscoParser(BaseParser):
                 cdm.telnet_enabled = False
             elif re.search(r"service password-encryption", line, re.I):
                 cdm.password_encryption = True
-            elif re.search(r"ip http server", line, re.I):
-                cdm.http_enabled = True
-            elif re.search(r"no ip http server", line, re.I):
+            elif re.search(r"^no ip http server$", line, re.I):
                 cdm.http_enabled = False
+            elif re.search(r"^ip http server$", line, re.I):
+                cdm.http_enabled = True
             elif re.search(r"^ntp server", line, re.I):
                 cdm.ntp_configured = True
             elif re.search(r"^logging (host|trap)", line, re.I):

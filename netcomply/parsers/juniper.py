@@ -33,10 +33,10 @@ class JuniperParser(BaseParser):
                 cdm.ssh_version = 2
             elif re.search(r"protocol-version\s*v1", line, re.I):
                 cdm.ssh_version = 1
-            elif re.search(r"^telnet\s*$|services telnet", line, re.I):
-                cdm.telnet_enabled = True
             elif re.search(r"delete system services telnet", line, re.I):
                 cdm.telnet_enabled = False
+            elif re.search(r"^telnet\s*$|services telnet", line, re.I):
+                cdm.telnet_enabled = True
             elif re.search(r"web-management http\b", line, re.I):
                 cdm.http_enabled = True
             elif re.search(r"^ntp\b|ntp server", line, re.I):
